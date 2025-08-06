@@ -1,187 +1,234 @@
-# Development Environment Dotfiles
+# WSL Development Environment Dotfiles
 
-Personal dotfiles and development environment setup for WSL + WezTerm workflow.
+A complete development environment setup for WSL + terminal workflow with automated project management and single-password authentication.
 
-## What's Included
+## 🚀 What This Provides
 
-### Shell Configuration
-- **`.bashrc`** - Main shell configuration with automated startup workflow
-- **`.profile`** - Login shell configuration  
-- **`.gitconfig`** - Git configuration
+### Automated Startup Workflow
+- Single password entry for all SSH keys and sudo operations
+- Automatic Docker daemon startup
+- Interactive project selection menu
+- GitHub connectivity checks and DNS resolution
 
-### Development Scripts (`coding/scripts/`)
-- **`project-selector.sh`** - Interactive project selection menu
-- **`single-password-setup.sh`** - Automated SSH key and Docker setup with single password entry
-- **`inspect-files.sh`** - Multi-file inspection utility (`ccat` command)
-- **`deploy.sh`** - Production deployment script
-- **`init-certs.sh`** - SSL certificate initialization
-- **`renew-certs.sh`** - SSL certificate renewal
+### Smart Project Management
+- Organized coding directory structure
+- Quick project switching with menu selection
+- Separate workspaces for projects, apps, sandbox, and notes
 
-## File Structure
+### Development Automation Scripts
+- Multi-file inspection utility
+- SSL certificate management
+- Deployment automation
+- Password consolidation for streamlined auth
+
+## 📁 File Structure
 
 ```
 ~/
-├── .bashrc                           # Main shell config
+├── .bashrc                           # Main shell config with startup automation
 ├── .profile                          # Login shell config
-├── .gitconfig                        # Git configuration
+├── .gitconfig                        # Git configuration (customize with your details)
 └── coding/
-    └── scripts/                      # Development automation scripts
-        ├── project-selector.sh       # Project selection menu
+    ├── projects/                     # Main development projects
+    ├── apps/                         # Application projects
+    ├── sandbox/                      # Experimental/learning projects
+    ├── notes/                        # Development notes and documentation
+    └── scripts/                      # Automation scripts
+        ├── project-selector.sh       # Interactive project menu
         ├── single-password-setup.sh  # SSH/Docker automation
-        ├── inspect-files.sh          # File inspection utility
-        ├── deploy.sh                 # Deployment script
-        ├── init-certs.sh            # SSL cert initialization
-        └── renew-certs.sh           # SSL cert renewal
+        ├── inspect-files.sh          # Multi-file inspection (`ccat`)
+        ├── deploy.sh                 # Deployment automation
+        ├── init-certs.sh            # SSL certificate setup
+        └── renew-certs.sh           # SSL certificate renewal
 ```
 
-## Prerequisites
+## 🛠 Prerequisites
 
-- **WSL2** (Debian/Ubuntu)
-- **WezTerm** terminal
+- **WSL2** (Debian/Ubuntu recommended)
+- **Terminal with tab support** (WezTerm, Windows Terminal, etc.)
 - **Git** 
-- **Docker** 
+- **Docker** (optional, remove Docker parts if not needed)
 - **Node.js and npm** (for development tools)
-- **SSH keys** set up for GitHub/servers
+- **expect** package: `sudo apt install expect`
 
-## Installation
+## 📦 Installation
 
-### 1. Clone this repository
+### 1. Clone and Setup
 ```bash
-git clone git@github.com:prestoine/dotfiles.git ~/temp-dotfiles
+# Clone to temporary directory
+git clone https://github.com/yourusername/dotfiles.git ~/temp-dotfiles
 cd ~/temp-dotfiles
-```
 
-### 2. Backup existing configs
-```bash
+# Backup existing configs
 mkdir -p ~/.dotfiles-backup
-cp ~/.bashrc ~/.dotfiles-backup/ 2>/dev/null || true
-cp ~/.profile ~/.dotfiles-backup/ 2>/dev/null || true
-cp ~/.gitconfig ~/.dotfiles-backup/ 2>/dev/null || true
+cp ~/.bashrc ~/.profile ~/.gitconfig ~/.dotfiles-backup/ 2>/dev/null || true
 ```
 
-### 3. Install dotfiles
+### 2. Customize for Your Setup
+
+**Update Git Configuration:**
 ```bash
-# Copy shell configurations
+# Edit .gitconfig with your details
+nano .gitconfig
+# Change:
+# [user]
+#   email = your-email@domain.com  
+#   name = Your Name
+```
+
+**Customize SSH Key Paths:**
+```bash
+# Edit single-password-setup.sh
+nano coding/scripts/single-password-setup.sh
+# Update SSH key paths on lines 13 and 18:
+# spawn ssh-add /home/YOUR_USERNAME/.ssh/YOUR_KEY_NAME
+```
+
+**Update Directory Paths:**
+```bash
+# Edit .bashrc if your username isn't 'dfg'
+nano .bashrc
+# Update any hardcoded paths like /home/dfg/ to /home/YOUR_USERNAME/
+```
+
+### 3. Install Files
+```bash
+# Copy configurations
 cp .bashrc ~/.bashrc
-cp .profile ~/.profile  
+cp .profile ~/.profile
 cp .gitconfig ~/.gitconfig
 
-# Create coding directory structure and install scripts
-mkdir -p ~/coding/scripts
-cp -r coding/scripts/* ~/coding/scripts/
+# Create directory structure and install scripts
+mkdir -p ~/coding/{projects,apps,sandbox,notes,scripts}
+cp coding/scripts/* ~/coding/scripts/
 chmod +x ~/coding/scripts/*.sh
 ```
 
-### 4. Configure WezTerm
-Update your WezTerm config (`~/.wezterm.lua` or `C:\Users\username\.wezterm.lua`) to start in your home directory:
+### 4. Configure Your Terminal
 
+**For WezTerm:**
 ```lua
+-- Add to ~/.wezterm.lua or Windows config
 return {
-  default_prog = {'wsl.exe', '-d', 'Debian'},
-  default_cwd = '//wsl$/Debian/home/prestoine',  -- Replace with your username
+  default_prog = {'wsl.exe', '-d', 'YourDistroName'},
+  default_cwd = '//wsl$/YourDistroName/home/yourusername',
   -- ... rest of your config
 }
 ```
 
-### 5. Set up SSH keys
-Ensure your SSH keys are in place:
+**For other terminals:** Set starting directory to your home directory in WSL.
+
+### 5. Set Up SSH Keys (Optional)
 ```bash
-# Your keys should be at:
-# ~/.ssh/linode  
-# ~/.ssh/github
-# 
-# Make sure they use the same passphrase for automated setup
+# Place your SSH keys in ~/.ssh/
+# Ensure they use the same passphrase for single-password workflow
+# Update single-password-setup.sh with your key names
 ```
 
-### 6. Reload configuration
+### 6. Test the Setup
 ```bash
 source ~/.bashrc
+# Should automatically navigate to ~/coding/projects/ and run automation
 ```
 
-## Features
+## 🎯 Customization Guide
 
-### Automated Startup Workflow
-When you open a new terminal, the system automatically:
-1. Navigates to `~/coding/projects/`
-2. Starts SSH agent and adds keys (single password prompt)
-3. Checks GitHub connectivity and adds to hosts if needed
-4. Starts Docker daemon
-5. Presents interactive project selection menu
+### Modify Startup Behavior
+Edit `~/.bashrc` around line 120+:
+- Change startup directory
+- Add/remove automation steps
+- Customize SSH key handling
+- Modify Docker startup
 
-### Project Selection Menu  
-Choose from:
-- Individual projects in `~/coding/projects/`
-- Notes directory (`~/coding/notes/`)
-- Plain terminal
+### Customize Project Selection
+Edit `~/coding/scripts/project-selector.sh`:
+- Add custom project directories
+- Modify menu options
+- Change default behaviors
+- Add integrations (tmux, screen, etc.)
 
-### Single Password Authentication
-All SSH keys and sudo operations use the same password for streamlined authentication.
+### Add Your Own Scripts
+Place additional automation scripts in `~/coding/scripts/` and they'll be in your PATH automatically.
 
-### Development Scripts
-- **`ccat`** - Enhanced file inspection (alias for `inspect-files.sh`)
-- Project-specific deployment and SSL management scripts
-
-## Directory Organization
-
-Your coding directory should be organized as:
-```
+### Directory Structure
+Organize your projects however you prefer:
+```bash
 ~/coding/
-├── projects/          # Main development projects
-├── apps/              # Application projects  
-├── sandbox/           # Experimental/learning projects
-├── notes/             # Development notes and documentation
-└── scripts/           # Automation scripts (tracked in this repo)
+├── work-projects/     # Work-related projects
+├── personal/          # Personal projects
+├── learning/          # Courses, tutorials, experiments
+└── scripts/          # Your automation scripts
 ```
 
-## Related Repositories
+## 🔧 Configuration Options
 
-- [nvim](https://github.com/prestoine/nvim) - Neovim configuration (separate repo)
+### Single Password Setup
+- **Enable:** Keep `single-password-setup.sh` as-is
+- **Disable:** Remove the call from `.bashrc` and handle SSH keys manually
+- **Customize:** Edit the script to add/remove authentication steps
 
-## Usage
+### Project Management
+- **Simple:** Just use project selector for navigation
+- **Advanced:** Integrate with tmux/screen for session management
+- **Custom:** Add your own project templates and initialization
+
+### Docker Integration
+- **Keep:** If you use Docker for development
+- **Remove:** Delete Docker-related lines from `single-password-setup.sh` and `.bashrc`
+- **Customize:** Add your own container startup routines
+
+## 📚 Usage Examples
 
 ### Daily Workflow
-1. Open WezTerm - automation runs, prompts for password once
-2. Select project from menu
-3. Neovim opens in project directory
-4. Use `<Space>tt` in WezTerm to create additional terminal tabs
-5. Use `<Space>w1`, `<Space>w2`, `<Space>w3` to switch between tabs
+1. Open terminal → automation runs
+2. Enter password once → all services authenticated
+3. Select project from menu → start coding
+4. Use terminal tabs for additional workspaces
 
 ### Key Commands
 - `ccat <files>` - Inspect multiple files with headers
-- `<Space>tt` - Create new terminal tab (WezTerm)
-- `<Space>w[1-9]` - Switch between terminal tabs
+- Project selector automatically runs on terminal startup
+- All your custom scripts available in PATH
 
-## Customization
+### Adding New Projects
+```bash
+cd ~/coding/projects
+git clone your-new-project
+# It will appear in project selector automatically
+```
 
-Edit `~/.bashrc` to modify:
-- Startup automation behavior
-- Directory paths
-- SSH key locations
-- Docker startup options
+## 🤝 Contributing
 
-Edit `~/coding/scripts/project-selector.sh` to customize:
-- Project directory structure
-- Menu options
-- Default behaviors
+This is designed to be a template/starting point. Fork it and customize for your workflow!
 
-## Troubleshooting
+**Ideas for enhancement:**
+- tmux/screen integration
+- IDE/editor selection menu  
+- Cloud service authentication
+- Development environment templates
+- Database connection management
 
-### "Command not found" errors
-Ensure scripts are executable:
+## 🐛 Troubleshooting
+
+### Permission Issues
 ```bash
 chmod +x ~/coding/scripts/*.sh
+chmod 600 ~/.ssh/* 2>/dev/null || true
 ```
 
-### SSH key issues
-Verify keys exist and have correct permissions:
-```bash
-ls -la ~/.ssh/
-chmod 600 ~/.ssh/linode ~/.ssh/github
-```
+### Path Issues
+Update any hardcoded paths in:
+- `.bashrc` (startup automation)
+- `coding/scripts/single-password-setup.sh` (SSH key paths)
+- Terminal configuration (starting directory)
 
-### WezTerm tab creation
-If `<Space>tt` doesn't work, check your WezTerm key bindings configuration.
+### SSH Key Problems
+- Ensure keys exist in `~/.ssh/`
+- Verify same passphrase for all keys
+- Update key names in `single-password-setup.sh`
 
 ---
 
-**Note**: This dotfiles setup is optimized for WSL2 + WezTerm + Docker development workflow. Adjust paths and configurations as needed for your specific setup.
+**🎯 Goal:** Streamlined development environment with minimal daily friction and maximum automation.
+
+**🔄 Philosophy:** One password, smart defaults, easy customization, and quick project switching.
