@@ -56,7 +56,7 @@ A complete development environment setup for WSL + terminal workflow with automa
 ### 1. Clone and Setup
 ```bash
 # Clone to temporary directory
-git clone https://github.com/yourusername/dotfiles.git ~/temp-dotfiles
+git clone https://github.com/prestoine/dotfiles.git ~/temp-dotfiles
 cd ~/temp-dotfiles
 
 # Backup existing configs
