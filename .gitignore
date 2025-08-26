@@ -1,4 +1,3 @@
-*
 !.bashrc
 !.profile
 !.gitconfig
@@ -6,4 +5,8 @@
 !README.md
 !coding/
 !coding/scripts/
-!coding/scripts/ttree/
+!coding/scripts/ttree/src/
+!coding/scripts/ttree/Cargo.toml
+!coding/scripts/ttree/Cargo.lock
+
+*
