@@ -1,6 +1,6 @@
 # WSL Development Environment Dotfiles
 
-A complete development environment setup for WSL + terminal workflow with automated project management and single-password authentication.
+A complete development environment setup for WSL + terminal workflow with automated project management and single-password authentication. This is a pretty specific configuration for my setup, wouldn't recommend cloning it.
 
 ## 🚀 What This Provides
 
