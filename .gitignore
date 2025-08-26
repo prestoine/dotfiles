@@ -1,15 +1,9 @@
-# Ignore everything by default
 *
-
-# Track dotfiles
 !.bashrc
-!.profile  
+!.profile
 !.gitconfig
 !.gitignore
 !README.md
-
-# Track coding directory structure and scripts only
 !coding/
-coding/*
 !coding/scripts/
-!coding/scripts/*
+!coding/scripts/ttree/
